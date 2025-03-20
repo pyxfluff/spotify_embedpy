@@ -54,7 +54,7 @@ def fetch_token():
         headers={
             "Authorization": "Basic "
             + base64.b64encode(
-                f"{config.get("CLIENT_ID")}:{config.get("CLIENT_SECRET")}".encode()
+                f"{config.get('CLIENT_ID')}:{config.get('CLIENT_SECRET')}".encode()
             ).decode(),
             "Content-Type": "application/x-www-form-urlencoded",
         },
