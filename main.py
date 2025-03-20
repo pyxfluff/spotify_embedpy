@@ -4,6 +4,7 @@ from pydantic import BaseModel
 from typing import List, Optional
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse, JSONResponse
 
 import os
@@ -11,6 +12,14 @@ import httpx
 import base64
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class SearchRequest(BaseModel):
     name: str
