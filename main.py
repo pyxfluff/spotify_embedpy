@@ -5,7 +5,7 @@ from typing import List, Optional
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import RedirectResponse, JSONResponse
+from fastapi.responses import RedirectResponse, JSONResponse, PlainTextResponse
 
 import os
 import httpx
@@ -103,6 +103,10 @@ def search(song_name, artist=None, album=None):
 @app.get("/")
 def root():
     return RedirectResponse("https://github.com/pyxfluff/spotify_embedpy")
+
+@app.get("/status")
+def status():
+    return PlainTextResponse("OK")
 
 @app.post("/search")
 def search_route(data: List[SearchRequest]):
