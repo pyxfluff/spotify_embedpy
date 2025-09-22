@@ -18,13 +18,15 @@ app.add_middleware(
     allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["*"],
+    allow_headers=["*"]
 )
+
 
 class SearchRequest(BaseModel):
     name: str
     artist: Optional[str] = None
     album: Optional[str] = None
+
 
 def load_config():
     config = {}
@@ -39,6 +41,7 @@ def load_config():
             key, value = line.strip().split("=", 1)
             config[key] = value
     return config
+
 
 def fetch_token():
     config = load_config()
@@ -56,9 +59,9 @@ def fetch_token():
             + base64.b64encode(
                 f"{config.get('CLIENT_ID')}:{config.get('CLIENT_SECRET')}".encode()
             ).decode(),
-            "Content-Type": "application/x-www-form-urlencoded",
+            "Content-Type": "application/x-www-form-urlencoded"
         },
-        data={"grant_type": "client_credentials"},
+        data={"grant_type": "client_credentials"}
     )
 
     return response.json().get("access_token")
@@ -86,27 +89,24 @@ def search(song_name, artist=None, album=None):
         print("No song found")
         return None
 
-    track_id = tracks[0]["id"]
-    song_title = tracks[0]["name"]
-    song_artist = tracks[0]["artists"][0]["name"]
-    album_name = tracks[0]["album"]["name"]
-
-    embed_url = f"https://open.spotify.com/embed/track/{track_id}"
-
     return {
-        "title": song_title,
-        "artist": song_artist,
-        "album": album_name,
-        "embed_url": embed_url,
+        "title": tracks[0]["name"],
+        "artist": tracks[0]["artists"][0]["name"],
+        "album": tracks[0]["album"]["name"],
+        "embed_url": f"https://open.spotify.com/embed/track/{tracks[0]["id"]}",
+        "art": tracks[0]["album"]["images"][0]["url"]
     }
+
 
 @app.get("/")
 def root():
     return RedirectResponse("https://github.com/pyxfluff/spotify_embedpy")
 
+
 @app.get("/status")
 def status():
     return PlainTextResponse("OK")
+
 
 @app.post("/search")
 def search_route(data: List[SearchRequest]):
@@ -115,4 +115,3 @@ def search_route(data: List[SearchRequest]):
         results.append(search(query.name, query.artist, query.album))
 
     return JSONResponse(results)
-
