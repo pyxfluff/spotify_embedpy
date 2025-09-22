@@ -93,7 +93,7 @@ def search(song_name, artist=None, album=None):
         "title": tracks[0]["name"],
         "artist": tracks[0]["artists"][0]["name"],
         "album": tracks[0]["album"]["name"],
-        "embed_url": f"https://open.spotify.com/embed/track/{tracks[0]["id"]}",
+        "embed_url": f"https://open.spotify.com/embed/track/{tracks[0]['id']}",
         "art": tracks[0]["album"]["images"][0]["url"]
     }
 
